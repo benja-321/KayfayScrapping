@@ -10,12 +10,15 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class SagaFalabellaScrapped {
 
-    public
+    public static final String[] FEATURES_CELLPHONE = {"Nombre comercial","Marca"};
 
     @Autowired
     CelularService celularService;
@@ -36,12 +39,14 @@ public class SagaFalabellaScrapped {
             List<String> urlCellphonesDescription = cellphonesPage.getLinkCellphonesCard();
             WebDriver driverCellphoneDescription = new ChromeDriver(chromeOptions);
             SagaFalabellaCellphoneDescriptionPage cellphoneDescriptionPage;
-            String cellphoneName;
+            HashMap<String,String> cellphoneFeatures = new HashMap<>();
+            List<String> featuresCellphone = new ArrayList<>();
+            featuresCellphone = Arrays.asList(FEATURES_CELLPHONE);
             for( String urlCellphoneDescription : urlCellphonesDescription){
                 driverCellphoneDescription.get(urlCellphoneDescription);
                 cellphoneDescriptionPage = new SagaFalabellaCellphoneDescriptionPage(driverCellphoneDescription);
-                cellphoneName = cellphoneDescriptionPage.getCellphoneName();
-                System.out.println(cellphoneName);
+                cellphoneFeatures = cellphoneDescriptionPage.getCellphoneFeatures(featuresCellphone);
+                System.out.println(cellphoneFeatures.toString());
             }
             driverCellphoneDescription.close();
             driverCellphones.close();
